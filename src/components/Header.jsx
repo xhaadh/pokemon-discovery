@@ -12,14 +12,10 @@ export default function Header({ activeTab, setActiveTab, show }) {
         show ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-1">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold">
-            PD
-          </div>
           <div>
             <h1 className="text-3xl font-bold text-gray-700">PokéDiscover</h1>
-            <p className="text-sm text-gray-500">Find & collect your favorite Pokémon</p>
           </div>
         </div>
         <nav className="flex gap-2">

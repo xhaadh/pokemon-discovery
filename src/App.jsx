@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Header from "./components/Header";
 import Discover from "./components/Discover";
 import Collection from "./components/Collection";
+import toast from 'react-hot-toast';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("discover");
@@ -39,9 +40,18 @@ export default function App() {
     localStorage.setItem("my_collection_v1", JSON.stringify(collection));
   }, [collection]);
 
+  // const handleAdd = (pokemon) => {
+  //   if (collection.find((p) => p.id === pokemon.id)) return;
+  //   setCollection((prev) => [...prev, pokemon]);
+  // };
+
   const handleAdd = (pokemon) => {
-    if (collection.find((p) => p.id === pokemon.id)) return;
+    if (collection.find((p) => p.id === pokemon.id)) {
+      toast.error(`${pokemon.name} is already in your collection!`);
+      return;
+    }
     setCollection((prev) => [...prev, pokemon]);
+    toast.success(`${pokemon.name} added to your collection!`);
   };
 
   return (
