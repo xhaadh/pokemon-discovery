@@ -49,6 +49,24 @@ const SortableItem = memo(function SortableItem({ p, handleRemove }) {
           : "transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:rotate-[0.5deg]"
         }`}
     >
+      {/* Drag Handle - Visible only on mobile */}
+      <div className="absolute top-2 left-2 sm:hidden text-gray-400 z-20">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 8h16M4 16h16"
+          />
+        </svg>
+      </div>
+
       {/* Remove Button - Top Right */}
       <button
         onClick={(e) => {
@@ -75,6 +93,7 @@ const SortableItem = memo(function SortableItem({ p, handleRemove }) {
         </svg>
       </button>
 
+      {/* Card Content */}
       <div className="p-4 sm:p-5 flex flex-col items-center">
         {/* Image */}
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 mb-4">
