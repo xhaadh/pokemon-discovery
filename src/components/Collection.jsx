@@ -41,16 +41,19 @@ const SortableItem = memo(function SortableItem({ p, handleRemove }) {
     <li
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className={`relative bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden cursor-grab 
+      className={`relative bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden 
       ${isDragging
           ? "ring-2 ring-amber-400 opacity-80 scale-[0.97] shadow-none transition-none"
           : "transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:rotate-[0.5deg]"
         }`}
+      // Desktop: drag whole card
+      {...(window.innerWidth >= 640 ? { ...attributes, ...listeners } : {})}
     >
-      {/* Drag Handle - Visible only on mobile */}
-      <div className="absolute top-2 left-2 sm:hidden text-gray-400 z-20">
+      {/* Drag Handle - Mobile only */}
+      <div
+        className="absolute top-2 left-2 sm:hidden text-gray-400 z-20 touch-none active:scale-110 transition"
+        {...(window.innerWidth < 640 ? { ...attributes, ...listeners } : {})}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="w-4 h-4"
@@ -67,7 +70,7 @@ const SortableItem = memo(function SortableItem({ p, handleRemove }) {
         </svg>
       </div>
 
-      {/* Remove Button - Top Right */}
+      {/* Remove Button */}
       <button
         onClick={(e) => {
           e.stopPropagation();
@@ -94,7 +97,7 @@ const SortableItem = memo(function SortableItem({ p, handleRemove }) {
       </button>
 
       {/* Card Content */}
-      <div className="p-4 sm:p-5 flex flex-col items-center">
+      <div className="p-4 sm:p-5 flex flex-col items-center cursor-grab">
         {/* Image */}
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 mb-4">
           <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-lg" />
@@ -152,7 +155,6 @@ const SortableItem = memo(function SortableItem({ p, handleRemove }) {
   );
 });
 
-
 function DragPreview({ p }) {
   if (!p) return null;
   return (
@@ -171,7 +173,7 @@ export default function Collection({ collection, setCollection }) {
   const [activeId, setActiveId] = useState(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5, delay: 150, tolerance: 5 } })
   );
 
   const handleDragStart = (event) => {
@@ -213,7 +215,7 @@ export default function Collection({ collection, setCollection }) {
             </p>
           </div>
           <span className="text-[10px] sm:text-xs text-gray-400 italic select-none">
-            Drag to reorder
+            Tap & Hold to Drag
           </span>
         </div>
 
@@ -244,7 +246,6 @@ export default function Collection({ collection, setCollection }) {
               </ul>
             </SortableContext>
 
-            {/* Drag overlay */}
             <DragOverlay>
               <DragPreview
                 p={collection.find((p) => p.id === activeId)}
